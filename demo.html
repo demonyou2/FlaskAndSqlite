@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Demo</title>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+</head>
+<body>
+    <div class="main">
+        <div>
+            <form action="">
+                <label for="id"><span>id:</span></label>
+                <input type="text" name="id" id="id">
+                <label for="name"><span>name:</span></label>
+                <input type="text" name="name" id="name">
+                <label for="score"><span>score:</span></label>
+                <input type="text" name="score" id="score">
+            </form>
+            <button id="add">ADD</button>
+            <button id="update">UPDATE</button>
+            <button id="delete">DELETE</button>
+            <button id="getall">GETALL</button>
+        </div>
+        <div class="table">
+            <table id="table">
+
+            </table>
+        </div>
+    </div>
+    <script>
+        // add
+        var addbtn = document.getElementById('add');
+        addbtn.addEventListener('click',function(){
+            var inputid = document.getElementById('id').value;
+            var inputname = document.getElementById('name').value;
+            var inputscore = document.getElementById('score').value;
+            var data = {
+                id: inputid,
+                name: inputname,
+                score: inputscore
+            };
+            $.ajax({
+                type: 'POST',
+                data: data,
+                url: 'http://127.0.0.1:5000/add',
+                success: function(res){
+                    console.log(res,'res')
+                }
+            })
+            console.log(data);
+        });
+        // getall
+        var getbtn = document.getElementById('getall');
+        getbtn.addEventListener('click',function(){
+            $.ajax({
+                type: 'GET',
+                url: 'http://127.0.0.1:5000/userlist',
+                success: function(res){
+                    console.log(res);
+                    var doms = ``;
+                    res.data.forEach(item => {
+                        var dom = `<tr><td>${item[0]}</td><td>${item[1]}</td><td>${item[2]}</td></tr>`;
+                        doms += dom;
+                    });
+                    var table = `<tr><th>ID</th><th>NAME</th><th>SCORE</th></tr>${doms}`;
+                    document.getElementById('table').innerHTML = table;
+                }
+            })
+        });
+        // update
+        var upbtn = document.getElementById('update');
+        upbtn.addEventListener('click',function(){
+            var inputid = document.getElementById('id').value;
+            var inputname = document.getElementById('name').value;
+            var inputscore = document.getElementById('score').value;
+            var data = {
+                id: inputid,
+                name: inputname,
+                score: inputscore
+            };
+            $.ajax({
+                type: 'PUT',
+                url: 'http://127.0.0.1:5000/update',
+                data: data
+            })
+        });
+        //delete
+        var deletebtn = document.getElementById('delete');
+        deletebtn.addEventListener('click',function(){
+            var inputid = document.getElementById('id').value;
+            var inputname = document.getElementById('name').value;
+            var inputscore = document.getElementById('score').value;
+            var data = {
+                id: inputid,
+                name: inputname,
+                score: inputscore
+            };
+            $.ajax({
+                type: 'DELETE',
+                url: 'http://127.0.0.1:5000/delete',
+                data: data
+            })
+        })
+    </script>
+</body>
+</html>
